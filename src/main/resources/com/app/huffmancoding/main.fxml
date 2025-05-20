@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.app.huffmancoding.MainController">
+   <left>
+      <VBox prefHeight="400.0" prefWidth="137.0" style="-fx-background-color: #0D1824;" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#encode" prefHeight="45.0" prefWidth="137.0" style="-fx-background-color: transparent;" text="codificar" textFill="#f8f8f8" />
+            <Button mnemonicParsing="false" onMouseClicked="#decode" prefHeight="45.0" prefWidth="137.0" style="-fx-background-color: transparent;" text="decodificar" textFill="#f8f8f8" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane fx:id="ap" prefHeight="420.0" prefWidth="599.0" style="-fx-background-color: #333456;" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
