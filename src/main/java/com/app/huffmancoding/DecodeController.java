@@ -17,11 +17,11 @@ public class DecodeController {
     @FXML
     private TableView<CharacterCode> tableView;
     @FXML
-    private TextField txtCharacter;
+    private TextField charaterField;
     @FXML
-    private TextField txtCode;
+    private TextField codeField;
     @FXML
-    private TextField txtBitString;
+    private TextField bitStringField;
     @FXML
     private TableColumn<CharacterCode, Character> characterColumn;
     @FXML
@@ -42,12 +42,12 @@ public class DecodeController {
 
     @FXML
     private void addCharacterCode() {
-        char character = txtCharacter.getText().charAt(0);
-        String code = txtCode.getText();
+        char character = charaterField.getText().charAt(0);
+        String code = codeField.getText();
         data.add(new CharacterCode(character, code));
-        txtCharacter.clear();
-        txtCode.clear();
-        txtCharacter.requestFocus();
+        charaterField.clear();
+        codeField.clear();
+        charaterField.requestFocus();
     }
 
     public void decode(MouseEvent mouseEvent) {
@@ -56,6 +56,6 @@ public class DecodeController {
             table.put(item.getCode(),item.getCharacter());
         }
 
-        decodedBitString.setText(huffmanCoding.decode(txtBitString.getText(),table));
+        decodedBitString.setText(huffmanCoding.decode(bitStringField.getText(),table));
     }
 }

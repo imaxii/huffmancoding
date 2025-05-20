@@ -1,5 +1,6 @@
 package com.app.huffmancoding;
 
+import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
@@ -7,9 +8,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
@@ -22,7 +23,9 @@ public class EncodeController {
     @FXML
     private Canvas canvas;
     @FXML
-    private TextField input;
+    private MFXTextField inputField;
+    @FXML
+    private HBox hbox;
     @FXML
     private TextArea bitString;
     @FXML
@@ -52,7 +55,6 @@ public class EncodeController {
             return cellData.getValue().codeProperty();
         });
 
-
         group.getTransforms().add(scale);
         // Dibujar en el canvas
         double canvasWidth = canvas.getWidth();
@@ -75,6 +77,12 @@ public class EncodeController {
         this.huffmanCoding = new HuffmanCoding();
 
         setupZooming();
+
+        hbox.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double width = newWidth.doubleValue();
+            //region30.setPrefWidth(width * 0.3);
+            inputField.setPrefWidth(width * 0.85);
+        });
     }
 
     private void drawTree(GraphicsContext gc, Node node, double x, double y, double horizontalOffset) {
@@ -111,7 +119,7 @@ public class EncodeController {
     public void encode(MouseEvent mouseEvent) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        Result result = huffmanCoding.encode(input.getText().toCharArray());
+        Result result = huffmanCoding.encode(inputField.getText().toCharArray());
         drawTree(gc, result.getTree(), 250, 50, 200);
         bitString.setText(result.getBitString());
         // Limpiar la tabla

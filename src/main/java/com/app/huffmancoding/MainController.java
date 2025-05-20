@@ -11,7 +11,6 @@ public class MainController {
     @FXML
     private BorderPane borderPane;
 
-
     @FXML
     public void initialize() {
         loadPage("encode");
