@@ -20,7 +20,6 @@
     <top>
         <HBox fx:id="hbox" spacing="15" style="-fx-padding: 5; -fx-background-color: rgba(43,45,66,0.8); -fx-background-radius: 5;">
          <MFXTextField fx:id="inputField" floatingText="texto a codificar" />
-
             <Button onMouseClicked="#encode" prefHeight="50.0" prefWidth="119.0" style="-fx-background-color: #6d72c3; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 8 25; -fx-background-radius: 4; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);" text="codificar" />
         </HBox>
     </top>

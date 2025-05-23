@@ -34,10 +34,9 @@ public class EncodeController {
     private TableColumn<CharacterCode, Character> characterColumn;
     @FXML
     private TableColumn<CharacterCode, String> codeColumn;
-    private double scaleFactor = 1.0;
-    private final Scale scale = new Scale(1, 1, 0, 0);
     @FXML
     private Group group;
+
     private HuffmanCoding huffmanCoding;
 
     private double scaleValue = 1.0;
@@ -47,54 +46,51 @@ public class EncodeController {
 
     @FXML
     public void initialize() {
+        characterColumn.setCellValueFactory(cellData -> cellData.getValue().characterProperty());
+        codeColumn.setCellValueFactory(cellData -> cellData.getValue().codeProperty());
 
-        characterColumn.setCellValueFactory(cellData -> {
-            return cellData.getValue().characterProperty();
-        });
-        codeColumn.setCellValueFactory(cellData -> {
-            return cellData.getValue().codeProperty();
-        });
-
-        group.getTransforms().add(scale);
-        // Dibujar en el canvas
-        double canvasWidth = canvas.getWidth();
-        double centerX = canvasWidth / 2;
-        // Obtener el contexto gráfico y traducir horizontalmente para centrar futuros dibujos
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.translate(centerX / 2, 0);
-        // Manejar el zoom con la rueda del mouse
-        group.setOnScroll((ScrollEvent event) -> {
-            double delta = event.getDeltaY();
-            if (delta > 0) {
-                scaleFactor *= 1.1;  // Zoom in
-            } else {
-                scaleFactor /= 1.1;  // Zoom out
-            }
-            scale.setX(scaleFactor);
-            scale.setY(scaleFactor);
-            event.consume();
-        });
-        this.huffmanCoding = new HuffmanCoding();
+        group.getTransforms().add(new Scale(1, 1, 0, 0)); // inicial
 
         setupZooming();
 
         hbox.widthProperty().addListener((obs, oldWidth, newWidth) -> {
-            double width = newWidth.doubleValue();
-            //region30.setPrefWidth(width * 0.3);
-            inputField.setPrefWidth(width * 0.85);
+            inputField.setPrefWidth(newWidth.doubleValue() * 0.85);
         });
+
+        this.huffmanCoding = new HuffmanCoding();
+    }
+
+    public void encode(MouseEvent mouseEvent) {
+        Result result = huffmanCoding.encode(inputField.getText().toCharArray());
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // Limpiar canvas y restablecer transformaciones
+        gc.setTransform(1, 0, 0, 1, 0, 0); // resetear transformaciones
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        // Guardar estado antes de traducir
+        gc.save();
+        gc.translate(canvas.getWidth() / 4, 0); // ajustar si lo deseas centrado
+        drawTree(gc, result.getTree(), 250, 50, 200);
+        gc.restore(); // restaurar estado original
+
+        bitString.setText(result.getBitString());
+
+        tableView.getItems().clear();
+        result.getTable().forEach((key, value) ->
+                tableView.getItems().add(new CharacterCode(key, value))
+        );
     }
 
     private void drawTree(GraphicsContext gc, Node node, double x, double y, double horizontalOffset) {
-        if (node == null) {
-            return;
-        }
+        if (node == null) return;
+
         gc.setFill(Color.LIGHTBLUE);
         gc.fillOval(x - NODE_RADIUS, y - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
         gc.setStroke(Color.BLACK);
         gc.strokeOval(x - NODE_RADIUS, y - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
 
-        String text = node.isLeafNode() ? String.valueOf(node.getCharacter() + "|" + node.getFrequency()) : String.valueOf(node.getFrequency());
+        String text = node.isLeafNode() ? node.getCharacter() + "|" + node.getFrequency() : String.valueOf(node.getFrequency());
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(14));
         gc.fillText(text, x - 10, y + 5);
@@ -103,7 +99,7 @@ public class EncodeController {
             double childX = x - horizontalOffset * 1.3;
             double childY = y + VERTICAL_SPACING;
             gc.strokeLine(x, y + NODE_RADIUS, childX, childY - NODE_RADIUS);
-            gc.fillText("0", (x + childX) / 2, (y + childY - 10) / 2); // Etiqueta para la arista izquierda
+            gc.fillText("0", (x + childX) / 2, (y + childY - 10) / 2);
             drawTree(gc, node.getLeft(), childX, childY, horizontalOffset / 2);
         }
 
@@ -111,21 +107,9 @@ public class EncodeController {
             double childX = x + horizontalOffset * 1.3;
             double childY = y + VERTICAL_SPACING;
             gc.strokeLine(x, y + NODE_RADIUS, childX, childY - NODE_RADIUS);
-            gc.fillText("1", (x + childX) / 2, (y + childY - 10) / 2); // Etiqueta para la arista derecha
+            gc.fillText("1", (x + childX) / 2, (y + childY - 10) / 2);
             drawTree(gc, node.getRight(), childX, childY, horizontalOffset / 2);
         }
-    }
-
-    public void encode(MouseEvent mouseEvent) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        Result result = huffmanCoding.encode(inputField.getText().toCharArray());
-        drawTree(gc, result.getTree(), 250, 50, 200);
-        bitString.setText(result.getBitString());
-        // Limpiar la tabla
-        tableView.getItems().clear();
-        // Agregar todos los elementos de la lista a la tabla
-        result.getTable().forEach((key, value) -> tableView.getItems().add(new CharacterCode(key, value)));
     }
 
     private void setupZooming() {
@@ -135,20 +119,14 @@ public class EncodeController {
             double zoomFactor = (event.getDeltaY() > 0) ? (1 + zoomIntensity) : (1 - zoomIntensity);
             double newScale = scaleValue * zoomFactor;
 
-            // Limitar escala
             if (newScale < minScale || newScale > maxScale) return;
-
             scaleValue = newScale;
 
             double x = event.getX();
             double y = event.getY();
 
-            // Limpiar transformaciones previas
             group.getTransforms().clear();
-
-            // Aplicar nueva transformación de escala relativa al puntero
-            Scale scale = new Scale(scaleValue, scaleValue, x, y);
-            group.getTransforms().add(scale);
+            group.getTransforms().add(new Scale(scaleValue, scaleValue, x, y));
 
             event.consume();
         });

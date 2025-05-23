@@ -87,13 +87,13 @@ public class HuffmanCoding {
 	 * @return nodo raiz del arbol
 	 */
 	private Node buildTree(Map<Character, Integer> map) {
-		PriorityQueue<Node> queue = new PriorityQueue<>();
+		PriorityQueue<Node> queue = new PriorityQueue<Node>();
 		Iterator<Character> it = map.keySet().iterator();
 		Node node = null;
 		while (it.hasNext()) {
-			char key = (char) it.next();
-			int occurrences = (int) map.get(key);
-			node = new Node(key, occurrences);
+			char key = it.next();
+			int frequency = map.get(key);
+			node = new Node(key, frequency);
 			queue.offer(node);
 		}
 		Node root = queue.peek();
