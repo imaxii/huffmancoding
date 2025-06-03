@@ -10,29 +10,31 @@ import java.io.IOException;
 public class MainController {
     @FXML
     private BorderPane borderPane;
+    private Parent encodeParent;
+    private Parent decodeParent;
 
     @FXML
     public void initialize() {
-        loadPage("encode");
-    }
-    @FXML
-    private void encode(){
-        loadPage("encode");
-    }
-
-    @FXML
-    private void decode(){
-        loadPage("decode");
-    }
-
-    private void loadPage(String page){
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(page+".fxml"));
-            borderPane.setCenter(root);
+            encodeParent = FXMLLoader.load(getClass().getResource("encode.fxml"));
+            decodeParent = FXMLLoader.load(getClass().getResource("decode.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit(0);
         }
+        encode();
+    }
 
+    @FXML
+    private void encode() {
+        if (encodeParent != null) {
+            borderPane.setCenter(encodeParent);
+        }
+    }
+
+    @FXML
+    private void decode() {
+        if (decodeParent != null) {
+            borderPane.setCenter(decodeParent);
+        }
     }
 }
