@@ -36,6 +36,9 @@ public class DecodeController {
         characterColumn.setCellValueFactory(new PropertyValueFactory<>("character"));
         codeColumn.setCellValueFactory(new PropertyValueFactory<>("code"));
         tableView.setItems(data);
+        codeField.setOnAction(event -> {
+            addCharacterCode();
+        });
     }
 
     @FXML
