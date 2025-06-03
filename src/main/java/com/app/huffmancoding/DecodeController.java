@@ -74,7 +74,10 @@ public class DecodeController {
     }
 
 
-    public void clearTable(ActionEvent actionEvent) {
-        tableView.getItems().clear();
+    public void removeLastValue(ActionEvent actionEvent) {
+        ObservableList<CharacterCode> items = tableView.getItems();
+        if (!items.isEmpty()) {
+            items.remove(items.size() - 1);
+        }
     }
 }
