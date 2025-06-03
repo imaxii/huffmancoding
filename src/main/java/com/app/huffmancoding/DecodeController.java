@@ -2,11 +2,9 @@ package com.app.huffmancoding;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
@@ -42,12 +40,20 @@ public class DecodeController {
 
     @FXML
     private void addCharacterCode() {
-        char character = charaterField.getText().charAt(0);
-        String code = codeField.getText();
-        data.add(new CharacterCode(character, code));
-        charaterField.clear();
-        codeField.clear();
-        charaterField.requestFocus();
+        try {
+            char character = charaterField.getText().charAt(0);
+            String code = codeField.getText();
+            data.add(new CharacterCode(character, code));
+            charaterField.clear();
+            codeField.clear();
+            charaterField.requestFocus();
+        }catch (Exception e){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null); // sin encabezado
+            alert.setContentText("ingrese valores validos en los campos");
+            alert.showAndWait();
+        }
     }
 
     public void decode(MouseEvent mouseEvent) {
@@ -57,5 +63,18 @@ public class DecodeController {
         }
 
         decodedBitString.setText(huffmanCoding.decode(bitStringField.getText(),table));
+    }
+
+    public void clearFields(MouseEvent mouseEvent) {
+        tableView.getItems().clear();
+        charaterField.clear();
+        codeField.clear();
+        decodedBitString.clear();
+        bitStringField.clear();
+    }
+
+
+    public void clearTable(ActionEvent actionEvent) {
+        tableView.getItems().clear();
     }
 }

@@ -17,7 +17,9 @@
          <HBox alignment="CENTER_LEFT" spacing="10">
             <MFXTextField fx:id="charaterField" floatingText="caracter" prefHeight="51.0" prefWidth="290.0" />
             <MFXTextField fx:id="codeField" floatingText="código" prefHeight="51.0" prefWidth="289.0" />
-            <Button alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#addCharacterCode" prefHeight="44.0" prefWidth="88.0" style="-fx-background-color: #6d72c3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 3;" text="Agregar" />
+            <Button alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#addCharacterCode" prefHeight="44.0" prefWidth="88.0" style="-fx-background-color: #6d72c3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 3;" text="agregar" />
+            <Button alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#clearFields" prefHeight="42.0" prefWidth="100.0" style="-fx-background-color: #6d72c3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 3;" text="limpiar" textAlignment="CENTER" />
+            <Button alignment="CENTER" contentDisplay="CENTER" onAction="#clearTable" onMouseClicked="#decode" prefHeight="42.0" prefWidth="100.0" style="-fx-background-color: #6d72c3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 3;" text="limpiar tabla" textAlignment="CENTER" />
          </HBox>
       </VBox>
    </top>
